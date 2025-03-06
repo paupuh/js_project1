@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <title>Home Budget Monitor</title>
+
+</head>
+<body>
+
+<div class="container">
+    <h1 class="my-4">Budget Monitor App</h1>
+
+    <!-- incomes and expenses-->
+    <section id="formSection">
+        <h2>Add income or expense</h2>
+        <form id="budgetForm">
+            <div class="hbm">
+                <label for="name" class="field-name">Expenses</label>
+                <input type="text" class="form-control" id="name" placeholder="ex. Withdrawal, Shopping" required aria-label="Transaction name">
+            </div>
+            <div class="hbm">
+                <label for="amount" class="field-name">Price(PLN)</label>
+                <input type="number" class="form-control" id="amount" placeholder="Kwota" required aria-label="Transaction price" min="0">
+            </div>
+            <div class="hbm">
+                <button type="button" id="addIncome" class="btn btn-success">Add Income</button>
+                <button type="button" id="addExpense" class="btn btn-danger">Add Spending</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Incomes and expenses list -->
+    <section id="incomeSection">
+        <h3>Incomes</h3>
+        <ul id="incomeList" class="list-group hbm"></ul>
+    </section>
+    
+    <section id="expenseSection">
+        <h3>Expenses</h3>
+        <ul id="expenseList" class="list-group hbm"></ul>
+    </section>
+
+    <!-- Bilans cominucate -->
+    <div id="balanceMessage" class="alert mt-4" role="alert"></div>
+</div>
+
+<!-- Dodanie skryptów JS z zewnętrznego źródła z CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
+
+
+
+//Zadaniem będzie stworzenie prostej aplikacji monitorującej wydatki w budżecie domowym w danym miesiącu. 
+//Aplikacja ma umożliwiać wprowadzenie przychodów (np. wypłata, sprzedaż na allegro itp.) oraz wydatków (np. zakupy, rachunki)
+// w formie list. Użytkownik powinien mieć również możliwość poprawienia danej pozycji pod kątem nazwy oraz kwoty. 
