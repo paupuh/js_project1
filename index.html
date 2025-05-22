@@ -1,60 +1,128 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-    <title>Home Budget Monitor</title>
+  <meta charset="UTF-8" />
+  <title>HOME BUDGET</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
 
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    header img {
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .summary {
+      background: #e0ffe0;
+      padding: 10px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .budget-columns {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .budget-column {
+      flex: 1;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f9f9f9;
+    }
+
+    .budget-column h2 {
+      margin-top: 0;
+    }
+
+    .form-inline {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .form-inline input {
+      flex: 1;
+      padding: 5px;
+    }
+
+    .form-inline button {
+      padding: 5px 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+      text-align: left;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    .entry-controls button {
+      margin-left: 10px;
+    }
+
+    .totals {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <img src="calculator.jpeg" alt="LOGO" />
+      <div class="summary" id="summaryText">Możesz jeszcze wydać 0 złotych</div>
+    </header>
 
-<div class="container">
-    <h1 class="my-4">Budget Monitor App</h1>
+    <div class="budget-columns">
+      <div class="budget-column">
+        <h2>PRZYCHODY</h2>
+        <div class="form-inline">
+          <input type="text" id="incomeName" placeholder="Nazwa przychodu" />
+          <input type="number" id="incomeAmount" placeholder="Kwota" />
+          <button onclick="addIncome()">Dodaj</button>
+        </div>
+        <ul id="incomeList"></ul>
+        <div class="totals" id="incomeTotal">Suma przychodów: 0zł</div>
+      </div>
 
-    <!-- incomes and expenses-->
-    <section id="formSection">
-        <h2>Add income or expense</h2>
-        <form id="budgetForm">
-            <div class="hbm">
-                <label for="name" class="field-name">Expenses</label>
-                <input type="text" class="form-control" id="name" placeholder="ex. Withdrawal, Shopping" required aria-label="Transaction name">
-            </div>
-            <div class="hbm">
-                <label for="amount" class="field-name">Price(PLN)</label>
-                <input type="number" class="form-control" id="amount" placeholder="Kwota" required aria-label="Transaction price" min="0">
-            </div>
-            <div class="hbm">
-                <button type="button" id="addIncome" class="btn btn-success">Add Income</button>
-                <button type="button" id="addExpense" class="btn btn-danger">Add Spending</button>
-            </div>
-        </form>
-    </section>
+      <div class="budget-column">
+        <h2>WYDATKI</h2>
+        <div class="form-inline">
+          <input type="text" id="expenseName" placeholder="Nazwa wydatku" />
+          <input type="number" id="expenseAmount" placeholder="Kwota" />
+          <button onclick="addExpense()">Dodaj</button>
+        </div>
+        <ul id="expenseList"></ul>
+        <div class="totals" id="expenseTotal">Suma wydatków: 0zł</div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Incomes and expenses list -->
-    <section id="incomeSection">
-        <h3>Incomes</h3>
-        <ul id="incomeList" class="list-group hbm"></ul>
-    </section>
-    
-    <section id="expenseSection">
-        <h3>Expenses</h3>
-        <ul id="expenseList" class="list-group hbm"></ul>
-    </section>
-
-    <!-- Bilans cominucate -->
-    <div id="balanceMessage" class="alert mt-4" role="alert"></div>
-</div>
-
-<!-- Dodanie skryptów JS z zewnętrznego źródła z CDN -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
-<script src="app.js"></script>
-
+  <script src="app.js"></script>
 </body>
 </html>
-
-
-
-//Zadaniem będzie stworzenie prostej aplikacji monitorującej wydatki w budżecie domowym w danym miesiącu. 
-//Aplikacja ma umożliwiać wprowadzenie przychodów (np. wypłata, sprzedaż na allegro itp.) oraz wydatków (np. zakupy, rachunki)
-// w formie list. Użytkownik powinien mieć również możliwość poprawienia danej pozycji pod kątem nazwy oraz kwoty. 
