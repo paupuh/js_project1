@@ -1,101 +1,92 @@
-let entries = [];
+// Select DOM elements
+const modalForm = document.getElementById('modalForm');
+const modalDescription = document.getElementById('modalDescription');
+const modalAmount = document.getElementById('modalAmount');
+const entryModal = $('#entryModal'); // jQuery object for Bootstrap modal
 
-function addIncome() {
-  const name = document.getElementById('incomeName').value.trim();
-  const amount = parseFloat(document.getElementById('incomeAmount').value);
+const incomeList = document.getElementById('incomeList');
+const expenseList = document.getElementById('expenseList');
+const incomeTotal = document.getElementById('incomeTotal');
+const expenseTotal = document.getElementById('expenseTotal');
+const summaryText = document.getElementById('summaryText');
 
-  if (!name || isNaN(amount) || amount <= 0) {
-    alert("Wprowadź poprawną nazwę i kwotę przychodu.");
+let currentEntryType = null; // will hold 'income' or 'expense'
+
+// Listen for when the modal opens and store the entry type
+$('#entryModal').on('show.bs.modal', function (event) {
+  const button = $(event.relatedTarget); // Button that triggered the modal
+  currentEntryType = button.data('type'); // Extract info from data-type attribute
+  
+  // Change modal title depending on entry type
+  const modalTitle = currentEntryType === 'income' ? 'Dodaj przychód' : 'Dodaj wydatek';
+  $('#entryModalLabel').text(modalTitle);
+
+  // Clear previous inputs
+  modalDescription.value = '';
+  modalAmount.value = '';
+});
+
+// Handle form submit inside modal
+modalForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const description = modalDescription.value.trim();
+  const amount = parseFloat(modalAmount.value);
+
+  if (!description || isNaN(amount) || amount <= 0) {
+    alert('Proszę podać poprawną nazwę i kwotę większą od 0');
     return;
   }
 
-  entries.push({ type: 'income', name, amount });
-  document.getElementById('incomeName').value = "";
-  document.getElementById('incomeAmount').value = "";
-  updateUI();
-}
+  // Create new list item
+  const li = document.createElement('li');
+  li.textContent = `${description}: ${amount.toFixed(2)} zł`;
 
-function addExpense() {
-  const name = document.getElementById('expenseName').value.trim();
-  const amount = parseFloat(document.getElementById('expenseAmount').value);
-
-  if (!name || isNaN(amount) || amount <= 0) {
-    alert("Wprowadź poprawną nazwę i kwotę wydatku.");
-    return;
+  if (currentEntryType === 'income') {
+    incomeList.appendChild(li);
+  } else if (currentEntryType === 'expense') {
+    expenseList.appendChild(li);
   }
 
-  entries.push({ type: 'expense', name, amount });
-  document.getElementById('expenseName').value = "";
-  document.getElementById('expenseAmount').value = "";
-  updateUI();
-}
+  // Update totals and summary
+  updateTotals();
 
-function editEntry(index) {
-  const entry = entries[index];
-  const newName = prompt("Zmień nazwę:", entry.name);
-  const newAmount = parseFloat(prompt("Zmień kwotę:", entry.amount));
+  // Close the modal
+  entryModal.modal('hide');
+});
 
-  if (newName && !isNaN(newAmount) && newAmount > 0) {
-    entries[index].name = newName;
-    entries[index].amount = newAmount;
-    updateUI();
-  }
-}
+// Function to sum up entries and update totals
+function updateTotals() {
+  const incomeSum = sumListItems(incomeList);
+  const expenseSum = sumListItems(expenseList);
 
-function deleteEntry(index) {
-  if (confirm("Czy na pewno chcesz usunąć ten wpis?")) {
-    entries.splice(index, 1);
-    updateUI();
-  }
-}
+  incomeTotal.textContent = `Suma przychodów: ${incomeSum.toFixed(2)} zł`;
+  expenseTotal.textContent = `Suma wydatków: ${expenseSum.toFixed(2)} zł`;
 
-function updateUI() {
-  const incomeList = document.getElementById('incomeList');
-  const expenseList = document.getElementById('expenseList');
-  incomeList.innerHTML = '';
-  expenseList.innerHTML = '';
-
-  entries.forEach((entry, index) => {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <strong>${entry.name}</strong>: ${entry.amount.toFixed(2)} zł 
-      <button onclick="editEntry(${index})">✏️</button>
-      <button onclick="deleteEntry(${index})">🗑️</button>
-    `;
-    if (entry.type === 'income') {
-      incomeList.appendChild(li);
-    } else {
-      expenseList.appendChild(li);
-    }
-  });
-
-  updateSummary();
-}
-
-function updateSummary() {
-  const income = entries
-    .filter(e => e.type === "income")
-    .reduce((sum, e) => sum + e.amount, 0);
-
-  const expenses = entries
-    .filter(e => e.type === "expense")
-    .reduce((sum, e) => sum + e.amount, 0);
-
-  const diff = income - expenses;
-
-  document.getElementById('incomeTotal').textContent = `Suma przychodów: ${income.toFixed(2)}zł`;
-  document.getElementById('expenseTotal').textContent = `Suma wydatków: ${expenses.toFixed(2)}zł`;
-
-  const summary = document.getElementById('summaryText');
-
-  if (diff > 0) {
-    summary.textContent = `Możesz jeszcze wydać ${diff.toFixed(2)} złotych.`;
-    summary.style.color = "green";
-  } else if (diff === 0) {
-    summary.textContent = "Bilans wynosi zero.";
-    summary.style.color = "black";
+  const balance = incomeSum - expenseSum;
+  if (balance > 0) {
+    summaryText.textContent = `Możesz jeszcze wydać ${balance.toFixed(2)} złotych`;
+  } else if (balance === 0) {
+    summaryText.textContent = `Bilans jest zerowy`;
   } else {
-    summary.textContent = `Bilans jest ujemny. Jesteś na minusie ${Math.abs(diff).toFixed(2)} złotych.`;
-    summary.style.color = "red";
+    summaryText.textContent = `Przekroczyłeś budżet o ${Math.abs(balance).toFixed(2)} złotych`;
   }
 }
+
+// Helper: sum amounts from list items
+function sumListItems(list) {
+  let sum = 0;
+  for (const li of list.children) {
+    // Extract the amount from the text e.g. "Food: 123.45 zł"
+    const parts = li.textContent.split(':');
+    if (parts.length > 1) {
+      const amountStr = parts[1].replace('zł', '').trim();
+      const amount = parseFloat(amountStr);
+      if (!isNaN(amount)) sum += amount;
+    }
+  }
+  return sum;
+}
+
+// Initial call to set totals on page load
+updateTotals();

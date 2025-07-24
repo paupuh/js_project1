@@ -3,93 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>HOME BUDGET</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
+  <link rel="stylesheet" href="style.css" />
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    header img {
-      width: 100px;
-      height: 100px;
-      background: #ccc;
-      display: block;
-      margin: 0 auto 10px;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    .summary {
-      background: #e0ffe0;
-      padding: 10px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .budget-columns {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .budget-column {
-      flex: 1;
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 10px;
-      background: #f9f9f9;
-    }
-
-    .budget-column h2 {
-      margin-top: 0;
-    }
-
-    .form-inline {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .form-inline input {
-      flex: 1;
-      padding: 5px;
-    }
-
-    .form-inline button {
-      padding: 5px 10px;
-    }
-
-    ul {
-      padding-left: 20px;
-      text-align: left;
-    }
-
-    li {
-      margin-bottom: 5px;
-    }
-
-    .entry-controls button {
-      margin-left: 10px;
-    }
-
-    .totals {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-  </style>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
@@ -98,31 +15,56 @@
       <div class="summary" id="summaryText">Możesz jeszcze wydać 0 złotych</div>
     </header>
 
-    <div class="budget-columns">
-      <div class="budget-column">
+    <main class="budget-columns">
+      <section class="budget-column">
         <h2>PRZYCHODY</h2>
-        <div class="form-inline">
-          <input type="text" id="incomeName" placeholder="Nazwa przychodu" />
-          <input type="number" id="incomeAmount" placeholder="Kwota" />
-          <button onclick="addIncome()">Dodaj</button>
-        </div>
+        <!-- Button to open modal for income -->
+        <button class="btn btn-success mb-2" data-toggle="modal" data-target="#entryModal" data-type="income">Dodaj przychód</button>
+
         <ul id="incomeList"></ul>
         <div class="totals" id="incomeTotal">Suma przychodów: 0zł</div>
-      </div>
+      </section>
 
-      <div class="budget-column">
+      <section class="budget-column">
         <h2>WYDATKI</h2>
-        <div class="form-inline">
-          <input type="text" id="expenseName" placeholder="Nazwa wydatku" />
-          <input type="number" id="expenseAmount" placeholder="Kwota" />
-          <button onclick="addExpense()">Dodaj</button>
-        </div>
+        <!-- Button to open modal for expense -->
+        <button class="btn btn-danger mb-2" data-toggle="modal" data-target="#entryModal" data-type="expense">Dodaj wydatek</button>
+
         <ul id="expenseList"></ul>
         <div class="totals" id="expenseTotal">Suma wydatków: 0zł</div>
-      </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Bootstrap modal for adding entries -->
+  <div class="modal fade" id="entryModal" tabindex="-1" role="dialog" aria-labelledby="entryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form id="modalForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="entryModalLabel">Dodaj wpis</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Input for entry description -->
+          <input type="text" id="modalDescription" class="form-control mb-2" placeholder="Nazwa" required />
+          <!-- Input for entry amount -->
+          <input type="number" id="modalAmount" class="form-control" placeholder="Kwota" required />
+        </div>
+        <div class="modal-footer">
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary">Dodaj</button>
+        </div>
+      </form>
     </div>
   </div>
 
+  <!-- Bootstrap JavaScript and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Your app JavaScript -->
   <script src="app.js"></script>
 </body>
 </html>
